@@ -1,27 +1,27 @@
-// import 'dotenv/config'
-// import express from 'express'
-// import { sequelize } from './src/db.config.js'
-// import startBot from './src/bot.js'
+import 'dotenv/config'
+import express from 'express'
+import { sequelize } from './src/components/database.config.js'
+import startBot from './src/components/bot.js'
 
-// const app = express();
-// app.use(express.json());
-
-
+const app = express();
+app.use(express.json());
 
 
-// async function startApp() {
-//   try {
-//     await sequelize.authenticate();
-//     await sequelize.sync();
 
-//     console.log('DB Connection has been established successfully.');
-//     app.listen(process.env.PORT, () => {
-//       console.log(`Bot server started at port: ${process.env.PORT}`);
-//     })
-//     await startBot();
-//   } catch (error) {
-//     console.log('DB not connected');
-//   }
-// }
-// startApp();
+
+async function startApp() {
+  try {
+    await sequelize.authenticate();
+    // await sequelize.sync();
+
+    console.log('DB Connection has been established successfully.');
+    app.listen(process.env.PORT, () => {
+      console.log(`Bot server started at port: ${process.env.PORT}`);
+    })
+    await startBot();
+  } catch (error) {
+    console.log('DB not connected');
+  }
+}
+startApp();
 

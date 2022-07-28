@@ -1,6 +1,6 @@
 import { sequelize } from '../components/database.config.js'
-import { DataTypes } from 'sequelize'
-
+import { DataTypes, Deferrable } from 'sequelize'
+import { Rate } from './rate.js'
 const Company = sequelize.define('Company',{
   company_id: {
     type: DataTypes.INTEGER,
@@ -21,7 +21,15 @@ const Company = sequelize.define('Company',{
   partnership: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
-  }
+  },
+  RateRateId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Rate,
+      key: 'rate_id',
+      deferrable: Deferrable.INITIALLY_IMMEDIATE
+    }
+  },
 },
 {
   timestamps: false,

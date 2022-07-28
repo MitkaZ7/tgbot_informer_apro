@@ -1,8 +1,8 @@
 import 'dotenv/config'
 import express from 'express'
 import { sequelize } from './src/components/database.config.js'
-import startBot from './src/components/bot.js'
-// import User from './src/models/rate.js'
+// import startBot from './src/components/bot.js'
+import launchBot from './src/components/telegrafbot.js'
 
 const app = express();
 app.use(express.json());
@@ -15,7 +15,7 @@ async function startApp() {
     app.listen(process.env.PORT, () => {
       console.log(`Bot server started at port: ${process.env.PORT}`);
     })
-    await startBot();
+    await launchBot();
   } catch (error) {
     console.log('DB not connected');
   }

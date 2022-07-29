@@ -5,24 +5,51 @@ import { User } from '../models/user.js'
 import { Company } from '../models/company.js'
 
 const greeting = (ctx) => {
-  const welcomeMsg = 'Привет! Что интересует?';
+  const userName = ctx.message.chat.username;
+  const welcomeMsg = `Привет ${userName} ! Что интересует?`;
   ctx.reply(welcomeMsg, {
     reply_markup: {
       "resize_keyboard": true,
       keyboard: mainKeyboard
     }
   })
-  console.log(ctx.message.text)
+  // console.log(ctx.message)
 }
 
 bot.action('navToRateKeyboard', async (ctx) => {
 
 
-  // bot.telegram.sendPhoto(ctx.chat.id, {
-  //   source: "res/dog.jpeg"
-  // })
-
 })
+
+bot.on('callback_query', (ctx) => {
+  // Explicit usage
+  ctx.answerInlineQuery
+
+
+  // Using context shortcut
+  ctx.answerCbQuery()
+})
+
+// bot.on('callback_query', async msg => {
+//   const data = msg.data;
+//   const chatId = msg.message.chat.id;
+//   if (data === '/again') {
+//     return startGame(chatId)
+//   }
+//   const user = await UserModel.findOne({ chatId })
+//   if (data == chats[chatId]) {
+//     user.right += 1;
+//     await bot.sendMessage(chatId, `Поздравляю, ты отгадал цифру ${chats[chatId]}`, againOptions);
+//   } else {
+//     user.wrong += 1;
+//     await bot.sendMessage(chatId, `К сожалению ты не угадал, бот загадал цифру ${chats[chatId]}`, againOptions);
+//   }
+//   await user.save();
+// })
+
+
+
+
 
 bot.hears('get', async (ctx) => {
   const firm = await Company.findByPk(2)
@@ -45,8 +72,6 @@ bot.hears('get', async (ctx) => {
 bot.command('getcontact', (ctx) => ctx.reply('Wanna get some contacts?'))
 bot.command('getprofile', (ctx) => ctx.reply('Wanna know all about company?'))
 bot.command('getprice', (ctx) => ctx.reply('Priceless'))
-
-
 
 
 

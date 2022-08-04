@@ -4,23 +4,37 @@ import { Company } from '../models/company.js'
 // import { COMPANY_RATE_HUB } from '../models/company_rate_hub.js'
 import { Contact } from '../models/contact.js'
 import { Rate } from '../models/rate.js'
-
+import { mainKeyboard, rateKeyboard } from './keyboard.js'
+import { Op } from 'sequelize'
 const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 
 Rate.hasMany(Company)
 Company.hasMany(Rate)
 
-// const keyboard = {
-//   reply_to_message_id: msg.message_id,
-//   reply_markup: {
-//     resize_keyboard: true,
-//     one_time_keyboard: true,
-//     keyboard: [['Все о клиенте'], ['Как связаться?', 'Какой тариф?'], ['Есть ли непродленные?']]
-//   }
-// };
 
 
+bot.on('message', async (msg) => {
+  const chatId = msg.chat.id;
+  const text = msg.text;
+  const result = await Company.findOne({
+    where: {
+      company_name: {
+        [Op.substring]: text
+      }
+    }
+  })
+  .then(firm => {
+    if (!firm) {
+      return 'Контрагент не найден'
+    }
+    const { company_name, inn, partnership } = firm.dataValues
+    console.log(company_name)
+    return company_name
+  })
+  // console.log(result)
 
+  bot.sendMessage(chatId, `Найден контрагент: ${result}`);
+});
 
 export default function startBot() {
   bot.on('message', async (msg) => {
@@ -32,7 +46,7 @@ export default function startBot() {
         reply_markup: {
           resize_keyboard: true,
           one_time_keyboard: true,
-          keyboard: [['Все о клиенте'], ['Как связаться?', 'Какой тариф?'], ['Есть ли непродленные?']]
+          keyboard: mainKeyboard
         }
       };
 

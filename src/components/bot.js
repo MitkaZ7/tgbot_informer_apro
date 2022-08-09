@@ -44,6 +44,9 @@ export default function startBot() {
       console.log('Узнать цены')
     } else if (msg.text === 'Получить контакты') {
       console.log('Получить контакты')
+    } else if (msg.text === 'Назад') {
+      // bot.removeTextListener(/Назад/)
+      bot.sendMessage(id, 'Вернуться в главное меню', mainOptions);
     } else {
       return
     }
@@ -68,9 +71,9 @@ export default function startBot() {
    searchCompanyHandler(msg); // не работает
  });
 
- bot.onText(/← Назад/, msg => {
+//  bot.onText(/← Назад/, msg => {
 
- })
+//  })
 
 
   // bot.on('message', async (msg) => {
@@ -106,13 +109,7 @@ export default function startBot() {
      searchCompanyHandler();
  })
 }
-const backToMainMenu = () => {
-  bot.onText(/Назад/, msg => {
-    const { id } = msg.chat;
-    bot.sendMessage(id, 'Вернуться в главное меню', mainOptions);
-    bot.removeTextListener(/Назад/);
-  })
-}
+
 
 
 
@@ -130,8 +127,9 @@ const backToMainMenu = () => {
             bot.sendMessage(chatId, 'Такого клиента у нас нет. ❌', repeatOptions);
           }
           bot.removeTextListener(/.*/);
-
+          // backToMainMenu();
           repeatСlientSearch();
+
         })
 
         .catch((error) => {

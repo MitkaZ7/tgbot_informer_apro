@@ -90,8 +90,8 @@ const periodKeyboard = [
 export const mainOptions = {
   reply_markup: {
     resize_keyboard: true,
-    one_time_keyboard: true,
-    inline_keyboard: mainKeyboard
+    // one_time_keyboard: true,
+    keyboard: mainKeyboard,
   },
   parse_mode: 'HTML'
 };
@@ -100,7 +100,7 @@ export const  repeatOptions = {
   reply_markup: {
     resize_keyboard: true,
     one_time_keyboard: true,
-    inline_keyboard: repeatKeyboard
+    keyboard: repeatKeyboard
   },
   parse_mode: 'HTML'
 }
@@ -109,7 +109,7 @@ export const rateOptions = {
   reply_markup: {
     resize_keyboard: true,
     one_time_keyboard: true,
-    inline_keyboard: rateСategoryKeyboard,
+    keyboard: rateСategoryKeyboard,
   },
   parse_mode: 'HTML'
 }

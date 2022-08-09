@@ -8,6 +8,7 @@ import createRateMarkup from '../utils/rateMarkup.js'
 import { Contact } from '../models/contact.js'
 import { Rate } from '../models/rate.js'
 import { Company } from '../models/company.js'
+import { debug } from '../utils/debug.js'
 import {
   mainOptions,
   repeatOptions,
@@ -19,19 +20,49 @@ const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 Rate.hasMany(Company)
 Company.hasMany(Rate)
 
+// const startHandler = (msg) => {
+//   let chatId = getChatId(msg.chat);
+//   bot.sendMessage(chatId, 'Welcome');
+//   bot.removeListener('message', startHandler)
+// }
 
+// const getCompanyName = (chatId) => {
+//   const id = chatId;
+//   bot.sendMessage(id, 'Пришли название клиента', {force_reply: true} )
+//   bot.onText(/Найти клиента/, msg => {
+//     console.log(msg.text)
+//   })
+// }
 
 
 export default function startBot() {
   bot.on('message', async (msg) => {
-    const text = msg.text;
-    const chatId = msg.chat.id; //
-    console.log(msg.from.id)
+    const {id} = msg.chat;
+    const {text} = msg;
+    const { first_name } = msg.from;
+    // const chatId = msg.chat.id; //
     if (text === '/start') {
+      bot.sendMessage(id, `👋 Привет ${first_name}, что интересует?`, mainOptions)
+      .then(()=>{
 
-      bot.sendMessage(chatId, "👋 Привет, что интересует?", mainOptions);
+      })
+      .catch((error)=>{
+        console.log(error)
+      })
+    } else {
+      bot.sendMessage(id, debug(msg))
     }
+
+    // console.log(msg.from.id)
+    // if (text === '/start') {
+
+    //   // getCompanyName(msg)
+    // }
   });
+
+
+
+
 
   function searchCompanyHandler(msg) {
     bot.onText(/.*/, async (msg) => {
@@ -94,32 +125,32 @@ export default function startBot() {
 
   //
 
-  bot.on('callback_query', async (msg) => {
-    const data = msg.data;
-    const querryId = msg.id
-    const chatId = msg.message.chat.id; // вынести во вне
-    console.log(data);
-    // console.log(chatId);
-    if (data === 'back') {
-      bot.sendMessage(chatId, "👋 Привет, что интересует?", mainOptions);
-    };
-    if (data === 'getсompany') {
-      bot.sendMessage(chatId, 'Пришли название клиента в свободной форме');
-      searchCompanyHandler(msg);
-    };
-    if (data === 'newquerry') {
-      bot.sendMessage(chatId, 'Пришли название клиента в свободной форме');
-      searchCompanyHandler(msg);
-    }
-    if (data === 'getprice') {
-      bot.sendMessage(chatId, 'Выбери категорию', rateOptions);
-      getRatesHandler()
-    }
-    if (data === 'newchoice') {
-      bot.sendMessage(chatId, 'Выбери категорию', rateOptions);
-      getRatesHandler()
-    }
-  })
+  // bot.on('callback_query', async (msg) => {
+  //   const data = msg.data;
+  //   const querryId = msg.id
+  //   const chatId = msg.message.chat.id; // вынести во вне
+  //   console.log(data);
+  //   // console.log(chatId);
+  //   if (data === 'back') {
+  //     bot.sendMessage(chatId, "👋 Привет, что интересует?", mainOptions);
+  //   };
+  //   if (data === 'getсompany') {
+  //     bot.sendMessage(chatId, 'Пришли название клиента в свободной форме');
+  //     searchCompanyHandler(msg);
+  //   };
+  //   if (data === 'newquerry') {
+  //     bot.sendMessage(chatId, 'Пришли название клиента в свободной форме');
+  //     searchCompanyHandler(msg);
+  //   }
+  //   if (data === 'getprice') {
+  //     bot.sendMessage(chatId, 'Выбери категорию', rateOptions);
+  //     getRatesHandler()
+  //   }
+  //   if (data === 'newchoice') {
+  //     bot.sendMessage(chatId, 'Выбери категорию', rateOptions);
+  //     getRatesHandler()
+  //   }
+  // })
 
 
 

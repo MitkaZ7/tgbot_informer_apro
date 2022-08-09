@@ -20,64 +20,125 @@ const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 Rate.hasMany(Company)
 Company.hasMany(Rate)
 
-// const startHandler = (msg) => {
-//   let chatId = getChatId(msg.chat);
-//   bot.sendMessage(chatId, 'Welcome');
-//   bot.removeListener('message', startHandler)
-// }
-
-// const getCompanyName = (chatId) => {
-//   const id = chatId;
-//   bot.sendMessage(id, 'Пришли название клиента', {force_reply: true} )
-//   bot.onText(/Найти клиента/, msg => {
-//     console.log(msg.text)
-//   })
-// }
-
 
 export default function startBot() {
-  bot.on('message', async (msg) => {
-    const {id} = msg.chat;
-    const {text} = msg;
-    const { first_name } = msg.from;
-    // const chatId = msg.chat.id; //
-    if (text === '/start') {
-      bot.sendMessage(id, `👋 Привет ${first_name}, что интересует?`, mainOptions)
-      .then(()=>{
 
+  bot.on('message', msg => {
+    const { id } = msg.chat;
+    if (msg.text === 'Найти клиента') {
+      bot.sendMessage(id,'Пришли название клиента c большой буквы',{
+        reply_markup: {
+          remove_keyboard: true
+        }
       })
-      .catch((error)=>{
+      .then(async () => {
+        searchCompanyHandler();
+        await bot.sendMessage()
+      })
+      .catch((error) => {
         console.log(error)
       })
+      console.log('Найти клиента')
+    } else if (msg.text === 'Узнать цены') {
+
+      console.log('Узнать цены')
+    } else if (msg.text === 'Получить контакты') {
+      console.log('Получить контакты')
     } else {
-      bot.sendMessage(id, debug(msg))
+      return
     }
-
-    // console.log(msg.from.id)
-    // if (text === '/start') {
-
-    //   // getCompanyName(msg)
-    // }
-  });
+    return
+  })
 
 
+ bot.onText(/start/, msg => {
+   const { id } = msg.chat;
+   bot.sendMessage(id, `👋 Привет, что интересует?`, mainOptions)
+   .then(() => {
+      console.log('mainKeyboard')
+   })
+   .catch((error) => {
+      console.log(error)
+   })
+ });
+
+ bot.onText(/getclient (.+)/,(msg, [source, match])=>{
+   const { id } = msg.chat;
+  //  bot.sendMessage(id, debug(match))
+   searchCompanyHandler(msg); // не работает
+ });
+
+ bot.onText(/← Назад/, msg => {
+
+ })
+
+
+  // bot.on('message', async (msg) => {
+  //   const {id} = msg.chat;
+  //   const {text} = msg;
+  //   const { first_name } = msg.from;
+  //   // const chatId = msg.chat.id; //
+  //   if (text === '/start') {
+  //     bot.sendMessage(id, `👋 Привет ${first_name}, что интересует?`, mainOptions)
+  //     .then(()=>{
+
+  //     })
+      // .catch((error)=>{
+      //   console.log(error)
+      // })
+  //   } else {
+  //     bot.sendMessage(id, debug(msg))
+  //   }
+
+  //   // console.log(msg.from.id)
+  //   // if (text === '/start') {
+
+  //   //   // getCompanyName(msg)
+  //   // }
+  // });
+
+ const repeatСlientSearch= () => {
+   bot.onText(/Найти еще/,  msg => {
+
+     const { id } = msg.chat;
+     bot.sendMessage(id, 'Пришли название клиента');
+     bot.removeTextListener(/Найти еще/);
+     searchCompanyHandler();
+ })
+}
+const backToMainMenu = () => {
+  bot.onText(/Назад/, msg => {
+    const { id } = msg.chat;
+    bot.sendMessage(id, 'Вернуться в главное меню', mainOptions);
+    bot.removeTextListener(/Назад/);
+  })
+}
 
 
 
-  function searchCompanyHandler(msg) {
+
+
+
+  const searchCompanyHandler = () => {
     bot.onText(/.*/, async (msg) => {
       const chatId = msg.chat.id; // вынести во вне
       await searchCompany(msg)
         .then((company) => {
           if (company) {
             bot.sendMessage(chatId, createCompanyMarkup(company), repeatOptions);
-            bot.clearTextListeners();
           } else {
-            bot.clearTextListeners();
-            bot.sendMessage(chatId, 'Такого клиента у нас нет. ❌', repeatOptions)
+            bot.sendMessage(chatId, 'Такого клиента у нас нет. ❌', repeatOptions);
           }
+          bot.removeTextListener(/.*/);
+
+          repeatСlientSearch();
         })
-    });
+
+        .catch((error) => {
+          console.log(error)
+        })
+
+    })
   }
   //
   function periodSelect(chatId, categoryData){

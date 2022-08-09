@@ -2,11 +2,11 @@
 const repeatKeyboard = [
   [
     {
-      text: '← Назад',
+      text: 'Назад',
       callback_data: 'back'
     },
     {
-      text: 'Найти еще 🔎',
+      text: 'Найти еще',
       callback_data: 'newquerry'
     }
   ]

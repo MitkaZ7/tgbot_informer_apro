@@ -1,10 +1,7 @@
 import { Company } from '../models/company.js'
 import { Op } from 'sequelize'
-import { bot } from '../components/bot.js'
-import { repeatOptions } from '../components/keyboard.js'
-import { sequelize } from '../components/database.config.js'
+
 export const searchCompany = async (msg) => {
-  const chatId = msg.chat.id;
   const text = msg.text;
   const foundedCompany = await Company.findOne({
     // where:

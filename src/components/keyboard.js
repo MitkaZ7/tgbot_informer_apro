@@ -1,11 +1,3 @@
-// export const backKey = {
-//   text: '← Назад',
-//   callback_data: 'back'
-// }
-// export const repeatKey = {
-//   text: 'Найти еще 🔎',
-//   callback_data: 'newquerry'
-// }
 
 const repeatKeyboard = [
   [
@@ -20,7 +12,7 @@ const repeatKeyboard = [
   ]
 ]
 
-export const mainKeyboard = [
+const mainKeyboard = [
   [
     {
       text: 'Найти клиента',
@@ -39,28 +31,60 @@ export const mainKeyboard = [
   ]
   ,
 ]
-export const rateKeyboard = [
+const rateСategoryKeyboard = [
   [
     {
       text: 'КП Базовый',
-      callback_data: ''
+      callback_data: 'itsbase'
     },
     {
       text: 'КП ПРОФ',
-      callback_data: ''
+      callback_data: 'itspro'
     }
   ],
   [
     {
       text: 'FRESH',
-      callback_data: ''
+      callback_data: 'clouds'
     },
     {
       text: 'ФН и ОФД',
-      callback_data: ''
+      callback_data: 'fiscal'
     }
   ],
 
+]
+const periodKeyboard = [
+  [
+    {
+      text: '1 мес',
+      callback_data: 'one'
+    },
+    {
+      text: '3 мес',
+      callback_data: 'three'
+    }
+  ],
+  [
+    {
+      text: '6 мес',
+      callback_data: 'six'
+    },
+    {
+      text: '12 мес',
+      callback_data: 'twelve'
+    }
+  ],
+  [
+    {
+      text: '← Выбрать тариф',
+      callback_data: 'newchoice'
+    },
+    {
+      text: 'Найти клиента →',
+      callback_data: 'newquerry'
+    }
+  ]
 ]
 
 export const mainOptions = {
@@ -77,6 +101,25 @@ export const  repeatOptions = {
     resize_keyboard: true,
     one_time_keyboard: true,
     inline_keyboard: repeatKeyboard
+  },
+  parse_mode: 'HTML'
+}
+
+export const rateOptions = {
+  reply_markup: {
+    resize_keyboard: true,
+    one_time_keyboard: true,
+    inline_keyboard: rateСategoryKeyboard,
+  },
+  parse_mode: 'HTML'
+}
+
+export const periodOptions = {
+  reply_markup: {
+    resize_keyboard: true,
+    one_time_keyboard: true,
+    keyboard: periodKeyboard,
+    force_reply: true,
   },
   parse_mode: 'HTML'
 }

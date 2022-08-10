@@ -34,17 +34,17 @@ const mainKeyboard = [
 const rateСategoryKeyboard = [
   [
     {
-      text: 'КП Базовый',
+      text: 'ИТС БАЗОВЫЙ',
       callback_data: 'itsbase'
     },
     {
-      text: 'КП ПРОФ',
+      text: 'ИТС ПРОФ',
       callback_data: 'itspro'
     }
   ],
   [
     {
-      text: 'FRESH',
+      text: 'ИТС ФРЕШ',
       callback_data: 'clouds'
     },
     {
@@ -77,11 +77,11 @@ const periodKeyboard = [
   ],
   [
     {
-      text: '← Выбрать тариф',
+      text: 'Перевыбрать тариф',
       callback_data: 'newchoice'
     },
     {
-      text: 'Найти клиента →',
+      text: 'Выйти в главное меню',
       callback_data: 'newquerry'
     }
   ]
@@ -90,7 +90,6 @@ const periodKeyboard = [
 export const mainOptions = {
   reply_markup: {
     resize_keyboard: true,
-    // one_time_keyboard: true,
     keyboard: mainKeyboard,
   },
   parse_mode: 'HTML'
@@ -117,9 +116,7 @@ export const rateOptions = {
 export const periodOptions = {
   reply_markup: {
     resize_keyboard: true,
-    one_time_keyboard: true,
     keyboard: periodKeyboard,
-    force_reply: true,
   },
   parse_mode: 'HTML'
 }

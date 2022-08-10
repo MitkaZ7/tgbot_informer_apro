@@ -1,10 +1,10 @@
 import { Rate } from '../models/rate.js'
 import { Op } from 'sequelize'
 const categories = {
-  itspro: 'КП ПРОФ',
-  itsbase: 'КП Базовый',
-  clouds: 'Фреш',
-  fiscal: 'ОФД'
+  'КП ПРОФ' : 'КП ПРОФ',
+  'КП Базовый': 'КП Базовый',
+  FRESH: 'Фреш',
+  'ФН и ОФД': 'ФН и ОФД'
 }
 
 export const searchRate = async (category) => {

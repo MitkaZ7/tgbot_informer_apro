@@ -33,20 +33,43 @@ export default function startBot() {
       })
       .then(async () => {
         searchCompanyHandler();
-        await bot.sendMessage()
       })
       .catch((error) => {
         console.log(error)
       })
-      console.log('Найти клиента')
     } else if (msg.text === 'Узнать цены') {
+      bot.sendMessage(id, 'Выбери категорию:', rateOptions)
 
-      console.log('Узнать цены')
+      .then(() => {
+        const rateRegExp = /ИТС/iu;
+
+        bot.onText(rateRegExp, msg => {
+          bot.sendMessage(id, 'Выбери период:', periodOptions)
+          .then(() => {
+            const selectedRate = msg.text
+            bot.removeListener(rateRegExp)
+            return selectedRate
+          })
+            .then((selectedRate) => {
+            const periodRegExp = /\d{1,2}/;
+            bot.onText(periodRegExp, (msg, [monthQty]) => {
+              const selectedPeriod = msg.text;
+              bot.sendMessage(id, debug(monthQty)) // временно
+              bot.sendMessage(id, `Период ${selectedPeriod} для тарифа '${selectedRate}'`)
+              .then(() => {
+                bot.removeListener(periodRegExp)
+              })
+            })
+          })
+        })
+      })
+      // getRatesHandler(msg)
+
     } else if (msg.text === 'Получить контакты') {
       console.log('Получить контакты')
     } else if (msg.text === 'Назад') {
       // bot.removeTextListener(/Назад/)
-      bot.sendMessage(id, 'Вернуться в главное меню', mainOptions);
+      bot.sendMessage(id, 'Что интересует?', mainOptions);
     } else {
       return
     }
@@ -58,7 +81,7 @@ export default function startBot() {
    const { id } = msg.chat;
    bot.sendMessage(id, `👋 Привет, что интересует?`, mainOptions)
    .then(() => {
-      console.log('mainKeyboard')
+
    })
    .catch((error) => {
       console.log(error)
@@ -71,9 +94,7 @@ export default function startBot() {
    searchCompanyHandler(msg); // не работает
  });
 
-//  bot.onText(/← Назад/, msg => {
 
-//  })
 
 
   // bot.on('message', async (msg) => {
@@ -102,19 +123,12 @@ export default function startBot() {
 
  const repeatСlientSearch= () => {
    bot.onText(/Найти еще/,  msg => {
-
      const { id } = msg.chat;
      bot.sendMessage(id, 'Пришли название клиента');
      bot.removeTextListener(/Найти еще/);
      searchCompanyHandler();
  })
 }
-
-
-
-
-
-
 
   const searchCompanyHandler = () => {
     bot.onText(/.*/, async (msg) => {
@@ -127,43 +141,36 @@ export default function startBot() {
             bot.sendMessage(chatId, 'Такого клиента у нас нет. ❌', repeatOptions);
           }
           bot.removeTextListener(/.*/);
-          // backToMainMenu();
           repeatСlientSearch();
-
         })
-
         .catch((error) => {
           console.log(error)
         })
-
     })
   }
-  //
-  function periodSelect(chatId, categoryData){
-    let selectedPeriod = null;
-    const id = chatId;
-    const choosenCategory = categoryData;
-    console.log('CHATID: ' + id);
-    console.log('CATEGORY: ' + categoryData);
-    bot.sendMessage(id, 'Выбери период:', periodOptions)
-    bot.on('callback_query', async (msg) => {
-      selectedPeriod = msg.data;
-      console.log('SELECTED PERIOD: ' + selectedPeriod + ' КАТЕГОРИЯ: ' + choosenCategory);
-      bot.clearTextListeners();
-    })
-
-  }
+  // ниже попытка вынести в отдельную функции выбор периода для тарифа
+  // const selectPeriod = () => {
+  //   const periodRegExp = /\d{1,2}/;
+  //   bot.onText(periodRegExp, (msg, [monthQty]) => {
+  //     bot.sendMessage(id, debug(monthQty)) // временно
+  //     bot.sendMessage(id, `период выбран ${msg.text}`)
+  //       .then(() => {
+  //         bot.removeListener(periodRegExp)
+  //       })
+  //   })
+  // }
   //
   function getRatesHandler() {
-    bot.on('callback_query', async (msg) => {
-      const chatId = msg.message.chat.id; // снова тупой дубль
-      const categoryData = msg.data;
-      console.log('chatId: ' + chatId)
-      console.log('пес, вот данные категории: ' + categoryData);
-      periodSelect(chatId, categoryData)
+    // const { id } = msg.chat;
+    // const text = msg.text;
 
-
-
+  }
+    // bot.on('callback_query', async (msg) => {
+    //   const chatId = msg.message.chat.id; // снова тупой дубль
+    //   const categoryData = msg.data;
+    //   console.log('chatId: ' + chatId)
+    //   console.log('пес, вот данные категории: ' + categoryData);
+    //   periodSelect(chatId, categoryData)
 
       // const ratesArray = await searchRate(categoryData)
       // const mappedRates = ratesArray.map((elem, i) =>{
@@ -177,10 +184,9 @@ export default function startBot() {
       // // console.log(ratesArray)
       // console.log(sortedRates)
       // // bot.sendMessage(chatId, 'Нашел, еще что-то нужно?', repeatOptions)
-      bot.clearTextListeners();
+      // bot.clearTextListeners();
 
-    })
-  }
+
 
   //
 
@@ -193,22 +199,11 @@ export default function startBot() {
   //   if (data === 'back') {
   //     bot.sendMessage(chatId, "👋 Привет, что интересует?", mainOptions);
   //   };
-  //   if (data === 'getсompany') {
-  //     bot.sendMessage(chatId, 'Пришли название клиента в свободной форме');
-  //     searchCompanyHandler(msg);
-  //   };
-  //   if (data === 'newquerry') {
-  //     bot.sendMessage(chatId, 'Пришли название клиента в свободной форме');
-  //     searchCompanyHandler(msg);
-  //   }
   //   if (data === 'getprice') {
   //     bot.sendMessage(chatId, 'Выбери категорию', rateOptions);
   //     getRatesHandler()
   //   }
-  //   if (data === 'newchoice') {
-  //     bot.sendMessage(chatId, 'Выбери категорию', rateOptions);
-  //     getRatesHandler()
-  //   }
+
   // })
 
 

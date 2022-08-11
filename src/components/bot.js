@@ -21,6 +21,30 @@ export const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 Rate.hasMany(Company)
 Company.hasMany(Rate)
 
+function rateSelectHandler() {
+  const rateRegExp = /ИТС/iu;
+  bot.onText(rateRegExp, msg => {
+    const { id } = msg.chat;
+    const rate = msg.text
+    console.log(rate)
+    return rate
+  })
+  // .then((selectedRate)=>{
+  //   console.log('SelectedRATE: ' + selectedRate)
+  //   return selectedRate
+  // })
+}
+
+const periodSelectHandler = (rate) => {
+  const periodRegExp = /\d{1,2}/;
+  console.log('rate is:' + rate)
+  bot.onText(periodRegExp, (msg, [monthQty]) => {
+
+  })
+  // bot.removeListener(regexp)
+  // return selectedRate
+}
+
 
 export default function startBot() {
 
@@ -32,59 +56,55 @@ export default function startBot() {
           remove_keyboard: true
         }
       })
-      .then(async () => {
-        searchCompanyHandler();
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .then(async () => {
+          searchCompanyHandler();
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     } else if (msg.text === 'Узнать цены') {
-      bot.sendMessage(id, 'Выбери категорию:', rateOptions)
-      .then(() => {
-        const rateRegExp = /ИТС/iu;
-        bot.onText(rateRegExp, msg => {
-          bot.sendMessage(id, 'Выбери период:', periodOptions)
-          .then(() => {
-            const selectedRate = msg.text
-            bot.removeListener(rateRegExp)
-            return selectedRate
-          })
-            .then((selectedRate) => {
-            const periodRegExp = /\d{1,2}/;
-            bot.onText(periodRegExp, (msg, [monthQty]) => {
-             searchRate(selectedRate, Number(monthQty))
-              .then((rates) => {
-                rates.forEach((rate) => {
-                  console.log(rate)
-                  bot.sendMessage(id, createRateMarkup(rate), {parse_mode: 'HTML'})
-                    .then(() => {
-                      bot.onText(/Перевыбрать тариф/, msg =>{
-                        bot.sendMessage(id, 'Выбери тариф:', rateOptions);
-                        // bot.removeListener(periodRegExp);
-                        return
-                      })
-                      bot.onText(/Выйти в главное меню/, msg => {
-                        bot.sendMessage(id, 'Что нибудь еще?', mainOptions);
-                        // bot.removeListener(periodRegExp);
-                        // bot.removeListener(rateRegExp)
-                        bot.clearTextListeners()
-                        return
-                      })
-                      return
-                    })
-                  return
-                });
-              });
+      bot.sendMessage(id, 'Выбери категорию:', rateOptions);
+      // .then(async () => {
+      //   // rateSelectHandler()
+      // }).then(select => {
+      //   console.log('select: ' + select)
+      // })
 
 
-            })
+        // .then(async () => {
+
+        //   .then((selected) => {
+        //     console.log('selected: ' + selected)
+        //   })
+        // })
+        // .then(async (slctdRate) => {
+        //   periodSelectHandler(slctdRate)
+        // })
+
+            // .then((selectedRate) => {
+
+            //  searchRate(selectedRate, Number(monthQty))
+            //   .then((rates) => {
+                // rates.forEach((rate) => {
+                //   bot.sendMessage(id, createRateMarkup(rate), {parse_mode: 'HTML'})
+                    // .then(() => {
+                    //   bot.onText(/Перевыбрать тариф/, msg =>{
+                    //     bot.sendMessage(id, 'Выбери тариф:', rateOptions);
+
+                    //   })
+                    //   bot.onText(/Выйти в главное меню/, msg => {
+                    //     bot.sendMessage(id, 'Что нибудь еще?', mainOptions);
+                    //   })
+
+                    // })
+
             // .then(() => {
             //   bot.removeListener(periodRegExp);
             // })
 
-          })
-        })
-      })
+      //     })
+      //   })
+      // })
 
 
     } else if (msg.text === 'Получить контакты') {
@@ -102,13 +122,15 @@ export default function startBot() {
  bot.onText(/start/, async msg => {
    const { id } = msg.chat;
    const userId = msg.from.id;
+  // const {username} = msg.from;
+  //  await User.create({ tg_id: userId, name: username })
    auth(userId)
    .then((isAllowed) => {
      !isAllowed ? bot.sendMessage(id, `❌ Доступ запрещен ❌`) : bot.sendMessage(id, `👋 Привет, что интересует?`, mainOptions)
    })
  });
 
- const repeatСlientSearch= () => {
+ const repeatСlientSearch = () => {
    bot.onText(/Найти еще/,  msg => {
      const { id } = msg.chat;
      bot.sendMessage(id, 'Пришли название клиента');

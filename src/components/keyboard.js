@@ -82,7 +82,7 @@ const periodKeyboard = [
     },
     {
       text: 'Выйти в главное меню',
-      callback_data: 'newquerry'
+      callback_data: 'mainmenu'
     }
   ]
 ]
@@ -90,7 +90,7 @@ const periodKeyboard = [
 export const mainOptions = {
   reply_markup: {
     resize_keyboard: true,
-    keyboard: mainKeyboard,
+    inline_keyboard: mainKeyboard,
   },
   parse_mode: 'HTML'
 };
@@ -99,7 +99,7 @@ export const  repeatOptions = {
   reply_markup: {
     resize_keyboard: true,
     one_time_keyboard: true,
-    keyboard: repeatKeyboard
+    inline_keyboard: repeatKeyboard
   },
   parse_mode: 'HTML'
 }
@@ -108,7 +108,7 @@ export const rateOptions = {
   reply_markup: {
     resize_keyboard: true,
     one_time_keyboard: true,
-    keyboard: rateСategoryKeyboard,
+    inline_keyboard: rateСategoryKeyboard,
   },
   parse_mode: 'HTML'
 }
@@ -116,7 +116,7 @@ export const rateOptions = {
 export const periodOptions = {
   reply_markup: {
     resize_keyboard: true,
-    keyboard: periodKeyboard,
+    inline_keyboard: periodKeyboard,
   },
   parse_mode: 'HTML'
 }

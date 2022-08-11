@@ -17,6 +17,7 @@ async function startApp() {
     })
     await startBot();
   } catch (error) {
+    console.log(error);
     console.log('DB not connected');
   }
 }

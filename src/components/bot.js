@@ -1,5 +1,6 @@
 import TelegramBot from "node-telegram-bot-api"
 import { User } from '../models/user.js'
+import auth from '../middlewares/auth.js'
 import { searchCompany } from '../utils/searchCompany.js'
 import { searchRate } from '../utils/searchRate.js'
 import createCompanyMarkup from '../utils/companyMarkup.js'
@@ -15,7 +16,7 @@ import {
   rateOptions,
   periodOptions,
 } from './keyboard.js'
-const bot = new TelegramBot(process.env.TOKEN, { polling: true });
+export const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 
 Rate.hasMany(Company)
 Company.hasMany(Rate)
@@ -25,6 +26,10 @@ export default function startBot() {
 
   bot.on('message', msg => {
     const { id } = msg.chat;
+    // const userId = msg.from.id;
+    // console.log(userId)
+
+
     if (msg.text === 'Найти клиента') {
       bot.sendMessage(id,'Пришли название клиента c большой буквы',{
         reply_markup: {
@@ -77,16 +82,18 @@ export default function startBot() {
   })
 
 
- bot.onText(/start/, msg => {
+ bot.onText(/start/, async msg => {
    const { id } = msg.chat;
-   bot.sendMessage(id, `👋 Привет, что интересует?`, mainOptions)
-   .then(() => {
-
-   })
-   .catch((error) => {
-      console.log(error)
+   const userId = msg.from.id;
+   auth(userId)
+   .then((isAllowed) => {
+     !isAllowed ? bot.sendMessage(id, `❌ Доступ запрещен ❌`) : bot.sendMessage(id, `👋 Привет, что интересует?`, mainOptions)
    })
  });
+
+   //  const {username} = msg.from;
+  //  await User.create({ tg_id: userId, name: username })
+  //  bot.sendMessage(id, `${userId}`)
 
  bot.onText(/getclient (.+)/,(msg, [source, match])=>{
    const { id } = msg.chat;

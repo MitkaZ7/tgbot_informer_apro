@@ -108,40 +108,6 @@ export default function startBot() {
    })
  });
 
-
- bot.onText(/getclient (.+)/,(msg, [source, match])=>{
-   const { id } = msg.chat;
-  //  bot.sendMessage(id, debug(match))
-   searchCompanyHandler(msg); // не работает
- });
-
-
-
-
-  // bot.on('message', async (msg) => {
-  //   const {id} = msg.chat;
-  //   const {text} = msg;
-  //   const { first_name } = msg.from;
-  //   // const chatId = msg.chat.id; //
-  //   if (text === '/start') {
-  //     bot.sendMessage(id, `👋 Привет ${first_name}, что интересует?`, mainOptions)
-  //     .then(()=>{
-
-  //     })
-      // .catch((error)=>{
-      //   console.log(error)
-      // })
-  //   } else {
-  //     bot.sendMessage(id, debug(msg))
-  //   }
-
-  //   // console.log(msg.from.id)
-  //   // if (text === '/start') {
-
-  //   //   // getCompanyName(msg)
-  //   // }
-  // });
-
  const repeatСlientSearch= () => {
    bot.onText(/Найти еще/,  msg => {
      const { id } = msg.chat;
@@ -169,46 +135,6 @@ export default function startBot() {
         })
     })
   }
-  // ниже попытка вынести в отдельную функции выбор периода для тарифа
-  // const selectPeriod = () => {
-  //   const periodRegExp = /\d{1,2}/;
-  //   bot.onText(periodRegExp, (msg, [monthQty]) => {
-  //     bot.sendMessage(id, debug(monthQty)) // временно
-  //     bot.sendMessage(id, `период выбран ${msg.text}`)
-  //       .then(() => {
-  //         bot.removeListener(periodRegExp)
-  //       })
-  //   })
-  // }
-  //
-
-    // bot.on('callback_query', async (msg) => {
-    //   const chatId = msg.message.chat.id; // снова тупой дубль
-    //   const categoryData = msg.data;
-    //   console.log('chatId: ' + chatId)
-    //   console.log('пес, вот данные категории: ' + categoryData);
-    //   periodSelect(chatId, categoryData)
-
-      // const ratesArray = await searchRate(categoryData)
-      // const mappedRates = ratesArray.map((elem, i) =>{
-      //   return { index: i, rate: elem.dataValues}
-      // })
-      // const sortedRates = mappedRates.sort((a, b) => {
-      //   return a.rate.price - b.rate.price
-      // })
-
-      // sortedRates.forEach(rate => bot.sendMessage(chatId, createRateMarkup(rate.rate)));
-      // // console.log(ratesArray)
-      // console.log(sortedRates)
-      // // bot.sendMessage(chatId, 'Нашел, еще что-то нужно?', repeatOptions)
-      // bot.clearTextListeners();
-
-
-
-  //
-
-
-
 
 
 }

@@ -26,10 +26,6 @@ export default function startBot() {
 
   bot.on('message', msg => {
     const { id } = msg.chat;
-    // const userId = msg.from.id;
-    // console.log(userId)
-
-
     if (msg.text === 'Найти клиента') {
       bot.sendMessage(id,'Пришли название клиента c большой буквы',{
         reply_markup: {
@@ -44,10 +40,8 @@ export default function startBot() {
       })
     } else if (msg.text === 'Узнать цены') {
       bot.sendMessage(id, 'Выбери категорию:', rateOptions)
-
       .then(() => {
         const rateRegExp = /ИТС/iu;
-
         bot.onText(rateRegExp, msg => {
           bot.sendMessage(id, 'Выбери период:', periodOptions)
           .then(() => {
@@ -58,13 +52,36 @@ export default function startBot() {
             .then((selectedRate) => {
             const periodRegExp = /\d{1,2}/;
             bot.onText(periodRegExp, (msg, [monthQty]) => {
-              const selectedPeriod = msg.text;
-              bot.sendMessage(id, debug(monthQty)) // временно
-              bot.sendMessage(id, `Период ${selectedPeriod} для тарифа '${selectedRate}'`)
-              .then(() => {
-                bot.removeListener(periodRegExp)
-              })
+             searchRate(selectedRate, Number(monthQty))
+              .then((rates) => {
+                rates.forEach((rate) => {
+                  console.log(rate)
+                  bot.sendMessage(id, createRateMarkup(rate), {parse_mode: 'HTML'})
+                    .then(() => {
+                      bot.onText(/Перевыбрать тариф/, msg =>{
+                        bot.sendMessage(id, 'Выбери тариф:', rateOptions);
+                        // bot.removeListener(periodRegExp);
+                        return
+                      })
+                      bot.onText(/Выйти в главное меню/, msg => {
+                        bot.sendMessage(id, 'Что нибудь еще?', mainOptions);
+                        // bot.removeListener(periodRegExp);
+                        // bot.removeListener(rateRegExp)
+                        bot.clearTextListeners()
+                        return
+                      })
+                      return
+                    })
+                  return
+                });
+              });
+
+
             })
+            // .then(() => {
+            //   bot.removeListener(periodRegExp);
+            // })
+
           })
         })
       })
@@ -91,9 +108,6 @@ export default function startBot() {
    })
  });
 
-   //  const {username} = msg.from;
-  //  await User.create({ tg_id: userId, name: username })
-  //  bot.sendMessage(id, `${userId}`)
 
  bot.onText(/getclient (.+)/,(msg, [source, match])=>{
    const { id } = msg.chat;
@@ -167,11 +181,7 @@ export default function startBot() {
   //   })
   // }
   //
-  function getRatesHandler() {
-    // const { id } = msg.chat;
-    // const text = msg.text;
 
-  }
     // bot.on('callback_query', async (msg) => {
     //   const chatId = msg.message.chat.id; // снова тупой дубль
     //   const categoryData = msg.data;
@@ -197,21 +207,7 @@ export default function startBot() {
 
   //
 
-  // bot.on('callback_query', async (msg) => {
-  //   const data = msg.data;
-  //   const querryId = msg.id
-  //   const chatId = msg.message.chat.id; // вынести во вне
-  //   console.log(data);
-  //   // console.log(chatId);
-  //   if (data === 'back') {
-  //     bot.sendMessage(chatId, "👋 Привет, что интересует?", mainOptions);
-  //   };
-  //   if (data === 'getprice') {
-  //     bot.sendMessage(chatId, 'Выбери категорию', rateOptions);
-  //     getRatesHandler()
-  //   }
 
-  // })
 
 
 

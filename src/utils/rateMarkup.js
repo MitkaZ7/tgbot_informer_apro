@@ -1,5 +1,5 @@
 export default function createRateMarkup(rateData) {
   return `
-  ✅${rateData.title} \n🤑Цена: ${rateData.price} \n⏰ Месяцев: ${rateData.month_qty}
+  \nТариф: \n✅<b>${rateData.title}</b> \n🤑<b>Цена:</b> ${rateData.price} \n⏰<b>Месяцев:</b> ${rateData.month_qty} \n<b>Код заказа:</b> <code>${rateData.order_code}</code>
   `
 }

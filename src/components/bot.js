@@ -85,7 +85,7 @@ export default function startBot() {
           })
         })
       })
-      // getRatesHandler(msg)
+
 
     } else if (msg.text === 'Получить контакты') {
       console.log('Получить контакты')

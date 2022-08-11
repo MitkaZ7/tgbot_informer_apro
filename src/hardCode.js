@@ -49,3 +49,15 @@ await Company.create({ company_name: 'Аллмасс ООО', inn: 2312171830, k
 await Company.create({ company_name: 'Нью-оптика ООО', inn: 7712101883, kpp: 774301001, partnership: true })
 await Company.create({ company_name: 'Горпроект АО', inn: 7722276177, kpp: 773501001, partnership: true })
 await Company.create({ company_name: 'Промышленные технологии ООО', inn: 7734704691, kpp: 773401001, partnership: true })
+
+
+
+   //  const {username} = msg.from;
+  //  await User.create({ tg_id: userId, name: username })
+  //  bot.sendMessage(id, `${userId}`)
+
+  Диана 444793504
+Слава 412877247
+Алексей 142058074
+Мой 389936429
+Агасин 129579418

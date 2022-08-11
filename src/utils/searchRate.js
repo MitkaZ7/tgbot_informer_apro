@@ -1,22 +1,25 @@
 import { Rate } from '../models/rate.js'
 import { Op } from 'sequelize'
 const categories = {
-  itspro: 'КП ПРОФ',
-  itsbase: 'КП Базовый',
-  clouds: 'Фреш',
-  fiscal: 'ОФД'
+  'ИТС ПРОФ' : 'КП ПРОФ',
+  'ИТС БАЗОВЫЙ': 'КП Базовый',
+  'ИТС ФРЕШ': 'Фреш',
+  'ФН и ОФД': 'ФН и ОФД'
 }
 
-export const searchRate = async (category) => {
+export const searchRate = async (rate, period) => {
   let foundedRates = [];
-  if (Object.hasOwn(categories), category){
-    const searchValue = categories[category];
+  if (Object.hasOwn(categories), rate){
+    const searchValue = categories[rate];
     console.log(searchValue)
     await Rate.findAll({
       where: {
         title: {
           [Op.substring]: searchValue
-        }
+        },
+        [Op.and]: [
+          {month_qty: period}
+        ]
       }
     })
       .then(rates => {

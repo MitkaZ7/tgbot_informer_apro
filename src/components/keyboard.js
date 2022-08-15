@@ -18,10 +18,10 @@ const mainKeyboard = [
       text: 'Найти клиента',
       callback_data: 'getсompany'
     },
-    {
-      text: 'Получить контакты',
-      callback_data: 'getcontact'
-    }
+    // {
+      // text: 'Получить контакты',
+      // callback_data: 'getcontact'
+    // }
   ],
   [
     {
@@ -39,50 +39,69 @@ const rateСategoryKeyboard = [
     },
     {
       text: 'ИТС ПРОФ',
-      callback_data: 'itspro'
+      callback_data: 'itsprof'
     }
   ],
   [
     {
       text: 'ИТС ФРЕШ',
-      callback_data: 'clouds'
+      callback_data: 'fresh'
     },
     {
       text: 'ФН и ОФД',
-      callback_data: 'fiscal'
+      callback_data: 'fnofd'
     }
   ],
+  [
+    {
+      text: 'Назад',
+      callback_data: 'back'
+    }
+  ]
 
 ]
-const periodKeyboard = [
+const itsPeriodKeyboard = [
   [
     {
       text: '1 мес',
-      callback_data: 'one'
+      callback_data: 1
     },
     {
       text: '3 мес',
-      callback_data: 'three'
+      callback_data: 3
     }
   ],
   [
     {
       text: '6 мес',
-      callback_data: 'six'
+      callback_data: 6
     },
     {
       text: '12 мес',
-      callback_data: 'twelve'
+      callback_data: 12
     }
   ],
   [
     {
-      text: 'Перевыбрать тариф',
+      text: 'Другой тариф',
       callback_data: 'newchoice'
+    }
+  ],
+  [  {
+      text: 'меню',
+      callback_data: 'mainmenu'
+    }
+  ]
+]
+const freshPeriods = [
+  [
+    {
+      text: '6 мес',
+      callback_data: 6
     },
     {
-      text: 'Выйти в главное меню',
-      callback_data: 'newquerry'
+      text: '12 мес',
+      callback_data: 12
     }
   ]
 ]
@@ -90,7 +109,7 @@ const periodKeyboard = [
 export const mainOptions = {
   reply_markup: {
     resize_keyboard: true,
-    keyboard: mainKeyboard,
+    inline_keyboard: mainKeyboard,
   },
   parse_mode: 'HTML'
 };
@@ -99,7 +118,7 @@ export const  repeatOptions = {
   reply_markup: {
     resize_keyboard: true,
     one_time_keyboard: true,
-    keyboard: repeatKeyboard
+    inline_keyboard: repeatKeyboard
   },
   parse_mode: 'HTML'
 }
@@ -108,15 +127,23 @@ export const rateOptions = {
   reply_markup: {
     resize_keyboard: true,
     one_time_keyboard: true,
-    keyboard: rateСategoryKeyboard,
+    inline_keyboard: rateСategoryKeyboard,
   },
   parse_mode: 'HTML'
 }
 
-export const periodOptions = {
+export const itsPeriodOptions = {
   reply_markup: {
     resize_keyboard: true,
-    keyboard: periodKeyboard,
+    inline_keyboard: itsPeriodKeyboard,
   },
   parse_mode: 'HTML'
 }
+
+export const freshPeriodsOptions = {
+  reply_markup: {
+    resize_keyboard: true,
+    inline_keyboard: freshPeriods,
+  }
+}
+

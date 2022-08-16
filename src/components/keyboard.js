@@ -2,9 +2,11 @@
 const repeatKeyboard = [
   [
     {
-      text: 'Назад',
+      text: 'Выйти',
       callback_data: 'back'
     },
+  ],
+  [
     {
       text: 'Найти еще',
       callback_data: 'newquerry'
@@ -34,17 +36,17 @@ const mainKeyboard = [
 const rateСategoryKeyboard = [
   [
     {
-      text: 'ИТС БАЗОВЫЙ',
+      text: 'КП Базовый',
       callback_data: 'itsbase'
     },
     {
-      text: 'ИТС ПРОФ',
+      text: 'КП ПРОФ',
       callback_data: 'itsprof'
     }
   ],
   [
     {
-      text: 'ИТС ФРЕШ',
+      text: 'Фреш',
       callback_data: 'fresh'
     },
     {
@@ -84,13 +86,13 @@ const itsPeriodKeyboard = [
   [
     {
       text: 'Другой тариф',
-      callback_data: 'newchoice'
-    }
-  ],
-  [  {
-      text: 'меню',
-      callback_data: 'mainmenu'
-    }
+      callback_data: 'showrate'
+    },
+    {
+      text: 'Выйти',
+      callback_data: 'selectrate'
+    },
+
   ]
 ]
 const freshPeriods = [
@@ -109,7 +111,7 @@ const freshPeriods = [
 export const mainOptions = {
   reply_markup: {
     resize_keyboard: true,
-    inline_keyboard: mainKeyboard,
+    keyboard: mainKeyboard,
   },
   parse_mode: 'HTML'
 };
@@ -117,8 +119,8 @@ export const mainOptions = {
 export const  repeatOptions = {
   reply_markup: {
     resize_keyboard: true,
-    one_time_keyboard: true,
-    inline_keyboard: repeatKeyboard
+    // one_time_keyboard: true,
+    keyboard: repeatKeyboard
   },
   parse_mode: 'HTML'
 }
@@ -126,8 +128,8 @@ export const  repeatOptions = {
 export const rateOptions = {
   reply_markup: {
     resize_keyboard: true,
-    one_time_keyboard: true,
-    inline_keyboard: rateСategoryKeyboard,
+    // one_time_keyboard: true,
+    keyboard: rateСategoryKeyboard,
   },
   parse_mode: 'HTML'
 }
@@ -135,7 +137,7 @@ export const rateOptions = {
 export const itsPeriodOptions = {
   reply_markup: {
     resize_keyboard: true,
-    inline_keyboard: itsPeriodKeyboard,
+    keyboard: itsPeriodKeyboard,
   },
   parse_mode: 'HTML'
 }
@@ -143,7 +145,7 @@ export const itsPeriodOptions = {
 export const freshPeriodsOptions = {
   reply_markup: {
     resize_keyboard: true,
-    inline_keyboard: freshPeriods,
+    keyboard: freshPeriods,
   }
 }
 

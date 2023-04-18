@@ -2,68 +2,63 @@
 const repeatKeyboard = [
   [
     {
-      text: 'Выйти',
-      callback_data: 'back'
+      text: 'Другой тариф',
+      callback_data: 'getprice'
     },
   ],
-  [
-    {
-      text: 'Найти еще',
-      callback_data: 'newquerry'
-    }
-  ]
-]
-
-const mainKeyboard = [
   [
     {
       text: 'Найти клиента',
       callback_data: 'getсompany'
-    },
-    // {
-      // text: 'Получить контакты',
-      // callback_data: 'getcontact'
-    // }
-  ],
-  [
-    {
-      text: 'Узнать цены',
-      callback_data: 'getprice'
     }
   ]
-  ,
 ]
-const rateСategoryKeyboard = [
-  [
-    {
-      text: 'КП Базовый',
-      callback_data: 'itsbase'
-    },
-    {
-      text: 'КП ПРОФ',
-      callback_data: 'itsprof'
-    }
-  ],
-  [
-    {
-      text: 'Фреш',
-      callback_data: 'fresh'
-    },
-    {
-      text: 'ФН и ОФД',
-      callback_data: 'fnofd'
-    }
-  ],
-  [
-    {
-      text: 'Назад',
-      callback_data: 'back'
-    }
-  ]
 
+export const mainMenuBtns = [{
+  text: 'Узнать цены',
+  callback_data: 'getprice'
+},
+// {
+//   text: 'Найти клиента',
+//   callback_data: 'getсompany'
+// }
+];
+
+export const rateMenuBtns = [
+  {
+    text: 'КП Базовый',
+    callback_data: 'its_base'
+  },
+  {
+    text: 'КП ПРОФ',
+    callback_data: 'its_prof'
+  },
+  {
+    text: 'Фреш',
+    callback_data: 'its_fresh'
+  },
+  {
+    text: 'ФН/ОФД',
+    callback_data: 'ofd'
+  },
+  {
+    text: '1С',
+    callback_data: 'license'
+  },
+];
+export const retailMenuBtns = [
+  {
+    text: '15 мес ФН+ОФД',
+    callback_data: 'ofd_15'
+  },
+  {
+    text: '36 мес. ФН+ОФД',
+    callback_data: 'ofd_36'
+  }
 ]
-const itsPeriodKeyboard = [
-  [
+
+
+export const periodMenuBtns = [
     {
       text: '1 мес',
       callback_data: 1
@@ -71,9 +66,7 @@ const itsPeriodKeyboard = [
     {
       text: '3 мес',
       callback_data: 3
-    }
-  ],
-  [
+    },
     {
       text: '6 мес',
       callback_data: 6
@@ -82,70 +75,72 @@ const itsPeriodKeyboard = [
       text: '12 мес',
       callback_data: 12
     }
-  ],
-  [
-    {
-      text: 'Другой тариф',
-      callback_data: 'showrate'
-    },
-    {
-      text: 'Выйти',
-      callback_data: 'selectrate'
-    },
+];
 
-  ]
-]
-const freshPeriods = [
-  [
-    {
-      text: '6 мес',
-      callback_data: 6
-    },
-    {
-      text: '12 мес',
-      callback_data: 12
-    }
-  ]
-]
 
-export const mainOptions = {
-  reply_markup: {
-    resize_keyboard: true,
-    keyboard: mainKeyboard,
+export const licenseBtns = [
+  {
+    text: 'БУХ',
+    callback_data: 'bp'
   },
-  parse_mode: 'HTML'
-};
-
-export const  repeatOptions = {
-  reply_markup: {
-    resize_keyboard: true,
-    // one_time_keyboard: true,
-    keyboard: repeatKeyboard
+  {
+    text: 'ЗУП',
+    callback_data: 'zup'
   },
-  parse_mode: 'HTML'
-}
-
-export const rateOptions = {
-  reply_markup: {
-    resize_keyboard: true,
-    // one_time_keyboard: true,
-    keyboard: rateСategoryKeyboard,
+  {
+    text: 'Сервер',
+    callback_data: 'srv'
   },
-  parse_mode: 'HTML'
-}
-
-export const itsPeriodOptions = {
-  reply_markup: {
-    resize_keyboard: true,
-    keyboard: itsPeriodKeyboard,
+  {
+    text: 'УНФ/УТ',
+    callback_data: 'retail'
   },
-  parse_mode: 'HTML'
-}
-
-export const freshPeriodsOptions = {
-  reply_markup: {
-    resize_keyboard: true,
-    keyboard: freshPeriods,
+  {
+    text: 'Рабочие места',
+    callback_data: 'additional'
   }
-}
+]
+
+// export const mainOptions = {
+//   reply_markup: {
+//     resize_keyboard: true,
+//     inline_keyboard: mainKeyboard,
+//     one_time_keyboard: true,
+//   },
+//   parse_mode: 'HTML'
+// };
+
+// export const  repeatOptions = {
+//   reply_markup: {
+//     resize_keyboard: true,
+//     // one_time_keyboard: true,
+//     keyboard: repeatKeyboard
+//   },
+//   parse_mode: 'HTML'
+// }
+
+// export const rateOptions = {
+//   reply_markup: {
+//     resize_keyboard: true,
+//     one_time_keyboard: true,
+//     inline_keyboard: rateСategoryKeyboard,
+//   },
+//   parse_mode: 'HTML'
+// }
+
+// export const itsPeriodOptions = {
+//   reply_markup: {
+//     resize_keyboard: true,
+//     one_time_keyboard: true,
+//     inline_keyboard: itsPeriodKeyboard,
+//   },
+//   parse_mode: 'HTML'
+// }
+
+// export const freshPeriodsOptions = {
+//   reply_markup: {
+//     resize_keyboard: true,
+//     inline_keyboard: freshPeriods,
+//   }
+// }
 

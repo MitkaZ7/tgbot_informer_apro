@@ -9,14 +9,14 @@ export default async function auth (userId){
       }
     }
   })
-  .then(user => {
-    if(!user) {
-      return false
-    }
+  // .then(user => {
+  //   if(!user) {
+  //     return false
+  //   }
 
-    return true
-    // return user.dataValues.tg_id
-  })
-  console.log(foundedId)
+  //   return true
+  //   // return user.dataValues.tg_id
+  // })
+  // console.log(foundedId)
   return foundedId;
 }

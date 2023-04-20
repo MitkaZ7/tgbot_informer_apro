@@ -128,14 +128,14 @@ export const licenseBtns = [
 //   parse_mode: 'HTML'
 // }
 
-// export const itsPeriodOptions = {
-//   reply_markup: {
-//     resize_keyboard: true,
-//     one_time_keyboard: true,
-//     inline_keyboard: itsPeriodKeyboard,
-//   },
-//   parse_mode: 'HTML'
-// }
+export const itsPeriodOptions = {
+  reply_markup: {
+    resize_keyboard: true,
+    one_time_keyboard: true,
+    inline_keyboard: periodMenuBtns,
+  },
+  parse_mode: 'HTML'
+}
 
 // export const freshPeriodsOptions = {
 //   reply_markup: {

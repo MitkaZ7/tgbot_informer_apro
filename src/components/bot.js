@@ -15,7 +15,8 @@ import {
   rateMenuBtns,
   periodMenuBtns,
   retailMenuBtns,
-  licenseBtns
+  licenseBtns,
+
 } from './keyboard.js'
 Rate.hasMany(Company)
 Company.hasMany(Rate)
@@ -33,29 +34,74 @@ const licenseKeyboard = Keyboard.make(licenseBtns, {
 const retailKeyboard = Keyboard.make(retailMenuBtns, {
   columns: 2,
 }).inline();
-const periodArrayBtns = (btns, prefix) => {
-  for (let i = 0; i < btns.length; i++) {
-    btns[i].callback_data = `${prefix}`+ '_' + btns[i].callback_data;
-    console.log(btns[i])
-  }
-}
 
 
-
-
-
-bot.on('message',  async msg => {
+bot.on('message', async msg => {
   const text = msg.text;
   const chatId = msg.chat.id;
   const isAllowed = await auth(chatId);
   if (text === '/start') {
     !isAllowed ?
-     bot.sendMessage(chatId, `❌ Доступ запрещен ❌ `)
+      bot.sendMessage(chatId, `❌ Доступ запрещен ❌ `)
       : bot.sendMessage(chatId, `🤙Привет ${msg.from.first_name}, что интересует?`, mainKeyboard)
   }
+
   return
 })
 
+const createKeyboard = (btns, prefix) => {
+  const arr = []
+  for (let i = 0; i < btns.length; i++) {
+    btns[i].callback_data = `${prefix}`+ '_' + btns[i].callback_data;
+    // console.log(btns[i])
+    arr.push(btns[i])
+
+  }
+  console.log(arr)
+}
+
+function createKEYS(btns, prefix){
+  const arr = []
+  btns.forEach(elem => {
+     elem.callback_data = `${prefix}` + '_' + elem.callback_data;
+     arr.push(elem)
+  })
+  return {
+    reply_markup: {
+      resize_keyboard: true,
+      inline_keyboard: [arr]
+    }
+  }
+}
+
+const newFindRate = async (rateData) => {
+  // rateData = 'pits_base_12'
+  const response =  searchRate(rateData);
+  console.log(response)
+  // response.forEach((rate) => {
+  //   bot.sendMessage(chatId, createRateMarkup(rate), { parse_mode: 'HTML' })
+  // })
+
+  // const rateRegExp = /КП/ui;
+  // bot.sendMessage(chatId, 'Выбери категорию:', rateOptions)
+
+  // bot.onText(rateRegExp, (msg) => {
+  //   let chatId = msg.chat.id;
+  //   rateData.rate = msg.text
+  //   bot.sendMessage(chatId, 'Выбери период:', itsPeriodOptions)
+  //     .then(() => {
+  //       const periodRegExp = /(\d{1,2}\sмес)/ui;
+  //       bot.onText(periodRegExp, async (msg) => {
+  //         rateData.period = msg.text.split(' ')[0]
+  //         console.log(rateData);
+  //         const response = await searchRate({ rateData });
+  //         response.forEach((rate) => {
+  //           bot.sendMessage(chatId, createRateMarkup(rate), { parse_mode: 'HTML' })
+  //         })
+  //       })
+  //     })
+  // })
+}
 
 bot.on('callback_query', async msg => {
   // const ratesMenu = createMenu(ratesMenuBtns)
@@ -67,30 +113,35 @@ bot.on('callback_query', async msg => {
     await bot.sendMessage(chatId, `👇Выбери тариф:`, rateKeyboard);
   }
 
-  if (data.startsWith('its')) {
+  if (data.match(/^(its_fresh|its_base|its_prof)$/gm)) {
     ratePrefix = data;
-    // const keys =  periodArrayBtns(periodMenuBtns, ratePrefix)
-    // const periodKeyboard = Keyboard.make(keys, {
-    //   columns: 2,
-    // }).inline();
-    bot.sendMessage(chatId, `👇Выбери период:`);
-    bot.sendMessage(chatId, `Выбран тариф: ${ratePrefix}`)
+    const arr = createKEYS(periodMenuBtns, ratePrefix);
+    console.log(arr)
+
+    bot.sendMessage(chatId, `👇Выбери период:`, arr);
+    console.log(`Выбран тариф: ${ratePrefix}`)
   }
 
   if (data === 'ofd') {
     ratePrefix = data;
     bot.sendMessage(chatId, 'на сколько месяцев?', retailKeyboard)
-    bot.sendMessage(chatId, `Выбран тариф: ${ratePrefix}`)
+    console.log(`Выбран тариф: ${ratePrefix}`)
   }
 
   if (data === 'license') {
     ratePrefix = data;
     bot.sendMessage(chatId, 'Выбери ПО:', licenseKeyboard)
-    bot.sendMessage(chatId, `Выбран тариф: ${ratePrefix}`)
+    console.log(`Выбран тариф: ${ratePrefix}`)
+  }
+  if (data.match(/^(its_(base|prof|fresh)_\d{1,2})$/gmi)) {
+    let searchRateData = data;
+    newFindRate(searchRateData)
+    // console.log('MATCH')
   }
 
 
-  console.log(data)
+
+   console.log(data)
 })
 
 
@@ -407,3 +458,4 @@ bot.on('callback_query', async msg => {
 //   { command: '/getclient', description: 'Найти клиента' },
 //   { command: '/help', description: 'Список команд' }
 // ])
+

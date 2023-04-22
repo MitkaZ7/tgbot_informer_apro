@@ -13,52 +13,82 @@ const repeatKeyboard = [
     }
   ]
 ]
+const backKey = {
+  text: '←назад',
+  callback_data: 'back'
+}
 
-export const mainMenuBtns = [{
-  text: 'Узнать цены',
-  callback_data: 'getprice'
-},
-// {
-//   text: 'Найти клиента',
-//   callback_data: 'getсompany'
-// }
+export const mainKeyboard = [
+  [
+    {
+      text: 'Узнать цены',
+      callback_data: 'getprice'
+    },
+    {
+      text: 'Найти клиента',
+      callback_data: 'getсompany'
+    }
+  ],
+  [
+    // {
+    //   text: 'Заказать ИТС',
+    //   callback_data: 'getсompany'
+    // }
+  ]
 ];
 
-export const rateMenuBtns = [
-  {
-    text: 'КП Базовый',
-    callback_data: 'its_base'
-  },
-  {
-    text: 'КП ПРОФ',
-    callback_data: 'its_prof'
-  },
-  {
-    text: 'Фреш',
-    callback_data: 'its_fresh'
-  },
-  {
-    text: 'ФН/ОФД',
-    callback_data: 'ofd'
-  },
-  {
-    text: '1С',
-    callback_data: 'license'
-  },
+export const rateKeyboard = [
+  [
+    {
+      text: '🫴🏻КП Базовый',
+      callback_data: 'its_base'
+    },
+    {
+      text: '🤑КП ПРОФ',
+      callback_data: 'its_prof'
+    },
+    {
+      text: '🍊Фреш',
+      callback_data: 'its_fresh'
+    },
+  ],
+  [
+    {
+      text: '👮🏻‍♀️ФН/ОФД',
+      callback_data: 'ofd'
+    },
+    {
+      text: '🤪1С',
+      callback_data: 'license'
+    },
+  ]
 ];
-export const retailMenuBtns = [
-  {
-    text: '15 мес ФН+ОФД',
-    callback_data: 'ofd_15'
-  },
-  {
-    text: '36 мес. ФН+ОФД',
-    callback_data: 'ofd_36'
-  }
+export const retailKeyboard = [
+  [
+    {
+      text: '15 мес ФН+ОФД',
+      callback_data: 'ofd_15'
+    },
+    {
+      text: '36 мес. ФН+ОФД',
+      callback_data: 'ofd_36'
+    }
+  ],
+  // [
+  //   {
+  //     text: 'Атол 55Ф',
+  //     callback_data: 'atol55'
+  //   },
+  //   {
+  //     text: 'Атол 20Ф',
+  //     callback_data: 'atol20'
+  //   }
+  // ]
 ]
 
 
-export const periodMenuBtns = [
+export const periodKeyboard = [
+  [
     {
       text: '1 мес',
       callback_data: 1
@@ -67,6 +97,8 @@ export const periodMenuBtns = [
       text: '3 мес',
       callback_data: 3
     },
+  ],
+  [
     {
       text: '6 мес',
       callback_data: 6
@@ -75,40 +107,50 @@ export const periodMenuBtns = [
       text: '12 мес',
       callback_data: 12
     }
+  ],
+  [
+    {
+      text: '24 мес',
+      callback_data: 24
+    }
+  ]
 ];
 
 
-export const licenseBtns = [
-  {
-    text: 'БУХ',
-    callback_data: 'bp'
-  },
-  {
-    text: 'ЗУП',
-    callback_data: 'zup'
-  },
-  {
-    text: 'Сервер',
-    callback_data: 'srv'
-  },
-  {
-    text: 'УНФ/УТ',
-    callback_data: 'retail'
-  },
-  {
-    text: 'Рабочие места',
-    callback_data: 'additional'
-  }
+export const licenseKeyboard = [
+  [
+    {
+      text: '🧮БУХ',
+      callback_data: 'bp'
+    },
+    {
+      text: '✉️ЗУП',
+      callback_data: 'zup'
+    },
+    {
+      text: '📇Сервер',
+      callback_data: 'srv'
+    },
+  ],
+  [
+    {
+      text: '🛒УНФ/УТ',
+      callback_data: 'retail'
+    },
+    {
+      text: '🪑Рабочие места',
+      callback_data: 'additional'
+    }
+  ]
 ]
+export const mainOptions = {
+  reply_markup: {
 
-// export const mainOptions = {
-//   reply_markup: {
-//     resize_keyboard: true,
-//     inline_keyboard: mainKeyboard,
-//     one_time_keyboard: true,
-//   },
-//   parse_mode: 'HTML'
-// };
+    inline_keyboard: mainKeyboard,
+  },
+  parse_mode: 'HTML'
+};
+
 
 // export const  repeatOptions = {
 //   reply_markup: {
@@ -119,21 +161,16 @@ export const licenseBtns = [
 //   parse_mode: 'HTML'
 // }
 
-// export const rateOptions = {
-//   reply_markup: {
-//     resize_keyboard: true,
-//     one_time_keyboard: true,
-//     inline_keyboard: rateСategoryKeyboard,
-//   },
-//   parse_mode: 'HTML'
-// }
-
-export const itsPeriodOptions = {
-  reply_markup: {
+export const rateOptions = {
+    inline_keyboard: rateKeyboard,
     resize_keyboard: true,
     one_time_keyboard: true,
-    inline_keyboard: periodMenuBtns,
-  },
+}
+
+export const itsPeriodOptions = {
+  resize_keyboard: true,
+  one_time_keyboard: true,
+  inline_keyboard: periodKeyboard,
   parse_mode: 'HTML'
 }
 
@@ -143,4 +180,16 @@ export const itsPeriodOptions = {
 //     inline_keyboard: freshPeriods,
 //   }
 // }
+export const retailOptions = {
+  resize_keyboard: true,
+  one_time_keyboard: true,
+  inline_keyboard: retailKeyboard,
+  parse_mode: 'HTML'
+}
 
+export const licenseOptions = {
+  resize_keyboard: true,
+  one_time_keyboard: true,
+  inline_keyboard: licenseKeyboard,
+  parse_mode: 'HTML'
+}

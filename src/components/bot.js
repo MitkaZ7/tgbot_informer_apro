@@ -17,6 +17,7 @@ let msgIds = [];
 
 
 bot.on('message', async msg => {
+  //  меню 1 уровень
   const text = msg.text;
   const msgId = msg.message_id;
   const chatId = msg.chat.id;
@@ -38,8 +39,10 @@ bot.on('callback_query', async msg => {
   const msg_id = msg.message.message_id;
   const chatId = msg.message.chat.id;
   let ratePrefix = null;
+  const currentKeyboard = {}
   // const msgID = msgIds[0];
   if (data === 'getprice') {
+    // меню 2 уровень
     console.log('MSG ID:' + msg_id)
     console.log('CHAT ID:' + chatId)
     await bot.editMessageText('👇Выбери категорию: ', {
@@ -47,6 +50,7 @@ bot.on('callback_query', async msg => {
       message_id: msg_id,
       parse_mode: 'Markdown'
     });
+    console.log(rateOptions.inline_keyboard)
     await bot.editMessageReplyMarkup(rateOptions,
         {
           chat_id: chatId,
@@ -55,6 +59,7 @@ bot.on('callback_query', async msg => {
         );
   }
   if (data.match(/^(its_fresh|its_base|its_prof)$/gm)) {
+    // меню 3 уровень
     // ratePrefix = data;
     // const arr = createKEYS(periodMenuBtns, ratePrefix);
     // console.log(arr)
@@ -89,7 +94,6 @@ bot.on('callback_query', async msg => {
 
   if (data === 'license') {
     ratePrefix = data;
-
     console.log(`Выбран тариф: ${ratePrefix}`)
     await bot.editMessageText('Выбери ПО', {
       chat_id: chatId,
@@ -102,9 +106,10 @@ bot.on('callback_query', async msg => {
         message_id: msg_id,
       }
     );
-
-
-
   }
+  if (data === 'back') {
+    bot.sendMessage(chatId, `🤙Привет ${msg.from.first_name}, что интересует?`, mainOptions)
+  }
+
 });
 

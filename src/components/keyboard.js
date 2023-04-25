@@ -14,7 +14,7 @@ const repeatKeyboard = [
   ]
 ]
 const backKey = {
-  text: '←назад',
+  text: '⟸ назад',
   callback_data: 'back'
 }
 
@@ -61,7 +61,8 @@ export const rateKeyboard = [
       text: '🤪1С',
       callback_data: 'license'
     },
-  ]
+  ],
+  [backKey]
 ];
 export const retailKeyboard = [
   [
@@ -84,6 +85,7 @@ export const retailKeyboard = [
   //     callback_data: 'atol20'
   //   }
   // ]
+  [backKey]
 ]
 
 
@@ -109,6 +111,7 @@ export const periodKeyboard = [
     }
   ],
   [
+    backKey,
     {
       text: '24 мес',
       callback_data: 24
@@ -141,7 +144,8 @@ export const licenseKeyboard = [
       text: '🪑Рабочие места',
       callback_data: 'additional'
     }
-  ]
+  ],
+  [backKey]
 ]
 export const mainOptions = {
   reply_markup: {

@@ -197,3 +197,10 @@ export const licenseOptions = {
   inline_keyboard: licenseKeyboard,
   parse_mode: 'HTML'
 }
+
+export const repeatMain = {
+  resize_keyboard: true,
+  one_time_keyboard: true,
+  inline_keyboard: mainKeyboard,
+  parse_mode: 'HTML'
+}

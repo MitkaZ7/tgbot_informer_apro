@@ -9,7 +9,7 @@ import { Contact } from '../models/contact.js'
 import { Rate } from '../models/rate.js'
 import { Company } from '../models/company.js'
 import { debug } from '../utils/debug.js'
-import { mainOptions, rateOptions, itsPeriodOptions, retailOptions, licenseOptions, repeatMain } from './keyboard.js'
+import { mainOptions, rateOptions, itsPeriodOptions, retailOptions, licenseOptions, restartSearch, periodKeyboard } from './keyboard.js'
 Rate.hasMany(Company)
 Company.hasMany(Rate)
 export const bot = new TelegramBot(process.env.TOKEN, { polling: true });
@@ -17,6 +17,25 @@ let msgIds = [];
 const sessions  = [
 
 ]
+function addRatePrefix(btns, prefix) {
+  const arr = []
+  btns[0].forEach(elem => {
+    elem.callback_data = `${prefix}` + '_' + elem.callback_data;
+    arr.push(elem)
+  })
+  arr.push(btns[1])
+  // console.log(arr)
+  return arr
+  // return {
+  //   reply_markup: {
+  //     resize_keyboard: true,
+  //     inline_keyboard: [arr]
+  //   }
+  // }
+}
+const findRate = async (rateData) => {
+
+}
 
 
 bot.on('message', async msg => {
@@ -49,7 +68,7 @@ bot.on('callback_query', async msg => {
   const msg_id = msg.message.message_id;
   const chatId = msg.message.chat.id;
   let ratePrefix = null;
-  let user = null
+  let user = null;
   sessions.forEach(elem => {
     if (elem.id === chatId) {
       user = elem;
@@ -78,12 +97,13 @@ bot.on('callback_query', async msg => {
         );
   }
   if (data.match(/^(its_fresh|its_base|its_prof)$/gm)) {
-    user.prevMenu = 'rates'
-    console.log(sessions)
+    // user.prevMenu = 'rates'
+    // console.log(sessions)
     // меню 3 уровень
-    // ratePrefix = data;
-    // const arr = createKEYS(periodMenuBtns, ratePrefix);
-    // console.log(arr)
+    ratePrefix = data;
+    const arr = addRatePrefix(periodKeyboard, ratePrefix);
+    // console.log(periodKeyboard)
+    console.log(arr)
     await bot.editMessageText('👇Выбери период: ', {
       chat_id: chatId,
       message_id: msg_id,
@@ -95,10 +115,32 @@ bot.on('callback_query', async msg => {
         message_id: msg_id,
       }
     );
-    // console.log(`Выбран тариф: ${ratePrefix}`)
-  }
-  if (data === 'ofd') {
 
+    console.log(`Выбран тариф: ${ratePrefix}`)
+    return
+  }
+
+  if (data.match(/^(its_(base|prof|fresh)_\d{1,2})$/gmi)) {
+    let itsSearchData = data;
+    findRate(itsSearchData)
+    // console.log('MATCH')
+    console.log('ratePrefix: ' + ratePrefix)
+    const response = await searchRate(itsSearchData);
+    response.forEach( async (rate)  => {
+       await bot.sendMessage(chatId, createRateMarkup(rate), { parse_mode: 'HTML' })
+    })
+    // bot.deleteMessage(chatId, msg_id)
+    // bot.sendMessage(chatId, 'Выбрать другую категорию?')
+    // await bot.editMessageText('Другой тариф?', {
+    //   chat_id: chatId,
+    //   message_id: msg_id,
+    //   parse_mode: 'Markdown'
+    // });
+
+  }
+
+  if (data === 'ofd') {
+    // user.prevMenu = 'rates'
     ratePrefix = data;
     await bot.editMessageText('Комплект на какой период?', {
       chat_id: chatId,
@@ -115,6 +157,7 @@ bot.on('callback_query', async msg => {
   }
 
   if (data === 'license') {
+    // user.prevMenu = 'rates'
     ratePrefix = data;
     console.log(`Выбран тариф: ${ratePrefix}`)
     await bot.editMessageText('Выбери ПО', {
@@ -129,38 +172,64 @@ bot.on('callback_query', async msg => {
       }
     );
   }
-  if (user.prevMenu === 'rates' && data === 'back') {
+  if (data.match(/^ofd_\d{2}$/gmi)) {
 
-    await bot.editMessageText('👇Выбери категорию: ', {
-      chat_id: chatId,
-      message_id: msg_id,
-      parse_mode: 'Markdown'
-    });
+    console.log(data)
+    let ofdSearchData = data;
+    findRate(ofdSearchData)
+    // console.log('MATCH')
+    const response = await searchRate(ofdSearchData);
+    response.forEach((rate) => {
+      bot.sendMessage(chatId, createRateMarkup(rate), { parse_mode: 'HTML' })
+    })
+   }
+  // if (user.prevMenu === 'rates' && data === 'back') {
 
-    // console.log(rateOptions.inline_keyboard)
-    await bot.editMessageReplyMarkup(rateOptions,
-      {
-        chat_id: chatId,
-        message_id: msg_id,
-      }
-    );
-    user.prevMenu = 'main'
-    return
-  }
-  if (data === 'back' && user.prevMenu === 'main') {
-    await bot.editMessageText('что интересует?', {
-      chat_id: chatId,
-      message_id: msg_id,
-      parse_mode: 'Markdown'
-    });
-    // console.log(rateOptions.inline_keyboard)
-    await bot.editMessageReplyMarkup(repeatMain,
-      {
-        chat_id: chatId,
-        message_id: msg_id,
-      }
-    );
-  }
+  //   await bot.editMessageText('👇Выбери категорию: ', {
+  //     chat_id: chatId,
+  //     message_id: msg_id,
+  //     parse_mode: 'Markdown'
+  //   });
+
+  //   // console.log(rateOptions.inline_keyboard)
+  //   await bot.editMessageReplyMarkup(rateOptions,
+  //     {
+  //       chat_id: chatId,
+  //       message_id: msg_id,
+  //     }
+  //   );
+  //   user.prevMenu = 'main'
+  //   return
+  // }
+  // if (data === 'back' && user.prevMenu === 'main') {
+  //   await bot.editMessageText('что интересует?', {
+  //     chat_id: chatId,
+  //     message_id: msg_id,
+  //     parse_mode: 'Markdown'
+  //   });
+  //   // console.log(rateOptions.inline_keyboard)
+  //   await bot.editMessageReplyMarkup(repeatMain,
+  //     {
+  //       chat_id: chatId,
+  //       message_id: msg_id,
+  //     }
+  //   );
+  //   return
+  // }
+  // if (data === 'back' && user.prevMenu === 'main') {
+  //   await bot.editMessageText('что интересует?', {
+  //     chat_id: chatId,
+  //     message_id: msg_id,
+  //     parse_mode: 'Markdown'
+  //   });
+  //   // console.log(rateOptions.inline_keyboard)
+  //   await bot.editMessageReplyMarkup(repeatMain,
+  //     {
+  //       chat_id: chatId,
+  //       message_id: msg_id,
+  //     }
+  //   );
+  // }
 
 });
 

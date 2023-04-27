@@ -5,53 +5,87 @@ const categories = {
   'base': 'КП Базовый',
   'fresh' : 'Фреш',
   'ofd' : 'ФН и ОФД',
-  'license': '1C'
+  'license': '1С'
 }
 const splitSearchData = (data) => {
   console.log('data is: ' + data)
-  const dataObj = {
+  const dataToSearch = {
     rate: null,
     period: null,
   }
-  const dataArr = data.split('_');
-  dataObj.rate = dataArr[1];
-  dataObj.period = dataArr[2];
-  console.log('dataObj: ' + dataObj)
+  if (data.startsWith('its')) {
+    console.log('starts with its');
+    const splitedData = data.split('_');
+    dataToSearch.rate = splitedData[1];
+    dataToSearch.period = splitedData[2];
 
-  return dataObj;
+  } else {
+    console.log('not starts with its')
+    // console.log(dataToSearch)
+    dataToSearch.rate = splitedData[0];
+    console.log(dataToSearch)
+    // dataToSearch.period = 0;
+  }
+  return dataToSearch;
 }
 
-export const searchRate =  (rateData) => {
-  // rateData = 'pits_base_12'
-  const arr = splitSearchData(rateData);
-  console.log('arr is: ' + arr)
-
-  //====
-  const { rate, period } = arr
-  console.log('rate is ' + rate)
-  // let foundedRates = [];
-  // await Rate.findAll({
-  //   where: {
-  //     title: {
-  //       [Op.substring]: rate
-  //     },
-  //     [Op.and]: [
-  //       { month_qty: period }
-  //     ]
-  //   }
-  // })
-  //   .then(rates => {
-  //     if (!rates) {
-  //       console.log('rates not found')
-  //       return []
-  //     }
-  //     foundedRates = rates;
-  //   })
-    //==========
-  if (Object.hasOwn(categories), rate){
-    const searchValue = categories[rate];
-    console.log('searchValue: ' + searchValue)
-
+export const searchRate = async (callBackData) => {
+  let foundedRates = [];
+  const splited = callBackData.split('_');
+  const  rateData = {
+    rate: null,
+    period: null,
+    searchValue: null,
   }
-  return arr;
+  if (callBackData.startsWith('its')) {
+    rateData.rate = splited[1];
+    rateData.period = splited[2];
+  } else if (callBackData.startsWith('ofd')){
+    rateData.rate = splited[0];
+    rateData.period = splited[1];
+  }
+  // console.log('rate is ' + rate)
+  if (Object.hasOwn(categories), rateData.rate) {
+    rateData.searchValue = categories[rateData.rate];
+    console.log('searchValue ' + rateData.searchValue);
+    if (rateData.searchValue === 'ФН и ОФД' || rateData.searchValue === '1С') {
+      await Rate.findAll({
+        where: {
+          title: {
+            [Op.substring]: rateData.searchValue
+          }
+        }
+      })
+        .then(rates => {
+          if (!rates) {
+            console.log('rates not found')
+            return []
+          } else {
+            foundedRates = rates;
+          }
+        })
+    } else {
+    await Rate.findAll({
+      where: {
+        title: {
+          [Op.substring]: rateData.searchValue
+        },
+        [Op.and]: [
+          { month_qty: rateData.period }
+        ]
+      }
+    })
+      .then(rates => {
+        if (!rates) {
+          console.log('rates not found')
+          return []
+        } else {
+          foundedRates = rates;
+        }
+
+      })
+    }
+  }
+
+  return foundedRates;
 }

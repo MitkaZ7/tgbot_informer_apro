@@ -8,8 +8,8 @@ const repeatKeyboard = [
   ],
   [
     {
-      text: 'Найти клиента',
-      callback_data: 'getсompany'
+      text: 'Главное меню',
+      callback_data: 'home'
     }
   ]
 ]
@@ -24,10 +24,10 @@ export const mainKeyboard = [
       text: 'Узнать цены',
       callback_data: 'getprice'
     },
-    {
-      text: 'Найти клиента',
-      callback_data: 'getсompany'
-    }
+    // {
+    //   text: 'Найти клиента',
+    //   callback_data: 'getсompany'
+    // }
   ],
   [
     // {
@@ -99,8 +99,6 @@ export const periodKeyboard = [
       text: '3 мес',
       callback_data: 3
     },
-  ],
-  [
     {
       text: '6 мес',
       callback_data: 6
@@ -149,8 +147,9 @@ export const licenseKeyboard = [
 ]
 export const mainOptions = {
   reply_markup: {
-
+    resize_keyboard: true,
     inline_keyboard: mainKeyboard,
+    one_time_keyboard: true,
   },
   parse_mode: 'HTML'
 };
@@ -202,5 +201,12 @@ export const repeatMain = {
   resize_keyboard: true,
   one_time_keyboard: true,
   inline_keyboard: mainKeyboard,
+  parse_mode: 'HTML'
+}
+
+export const restartSearch = {
+  resize_keyboard: true,
+  one_time_keyboard: true,
+  inline_keyboard: repeatKeyboard,
   parse_mode: 'HTML'
 }

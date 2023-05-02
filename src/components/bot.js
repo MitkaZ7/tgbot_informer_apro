@@ -9,7 +9,7 @@ import { Contact } from '../models/contact.js'
 import { Rate } from '../models/rate.js'
 import { Company } from '../models/company.js'
 import { debug } from '../utils/debug.js'
-import { mainOptions, rateOptions, itsPeriodOptions, retailOptions, licenseOptions, restartSearch, periodKeyboard } from './keyboard.js'
+import { mainOptions, rateOptions, itsPeriodOptions, retailOptions, licenseOptions, repeatMain, restartSearch, periodKeyboard } from './keyboard.js'
 Rate.hasMany(Company)
 Company.hasMany(Rate)
 export const bot = new TelegramBot(process.env.TOKEN, { polling: true });
@@ -41,13 +41,15 @@ const findRate = async (rateData) => {
 bot.on('message', async msg => {
   //  меню 1 уровень
   const text = msg.text;
-  const msgId = msg.message_id;
   const chatId = msg.chat.id;
+  console.log(chatId)
   const isAllowed = await auth(chatId);
   if (text === '/start' && isAllowed) {
     const user = {
-      id: chatId,
-      prevMenu: 'main'
+      chatId: chatId,
+      msgId: null,
+      prevMenu: 'main',
+      msgId: null,
     }
     sessions.push(user)
      Promise.all([
@@ -70,11 +72,12 @@ bot.on('callback_query', async msg => {
   let ratePrefix = null;
   let user = null;
   sessions.forEach(elem => {
-    if (elem.id === chatId) {
+    if (elem.chatId === chatId) {
       user = elem;
     }
   });
-  // console.log(user)
+  console.log('user down')
+  console.log(user)
 
   // const msgID = msgIds[0];
   if (data === 'getprice') {
@@ -173,7 +176,6 @@ bot.on('callback_query', async msg => {
     );
   }
   if (data.match(/^ofd_\d{2}$/gmi)) {
-
     console.log(data)
     let ofdSearchData = data;
     findRate(ofdSearchData)
@@ -183,53 +185,53 @@ bot.on('callback_query', async msg => {
       bot.sendMessage(chatId, createRateMarkup(rate), { parse_mode: 'HTML' })
     })
    }
-  // if (user.prevMenu === 'rates' && data === 'back') {
+  if (user.prevMenu === 'rates' && data === 'back') {
 
-  //   await bot.editMessageText('👇Выбери категорию: ', {
-  //     chat_id: chatId,
-  //     message_id: msg_id,
-  //     parse_mode: 'Markdown'
-  //   });
+    await bot.editMessageText('👇Выбери категорию: ', {
+      chat_id: chatId,
+      message_id: msg_id,
+      parse_mode: 'Markdown'
+    });
 
-  //   // console.log(rateOptions.inline_keyboard)
-  //   await bot.editMessageReplyMarkup(rateOptions,
-  //     {
-  //       chat_id: chatId,
-  //       message_id: msg_id,
-  //     }
-  //   );
-  //   user.prevMenu = 'main'
-  //   return
-  // }
-  // if (data === 'back' && user.prevMenu === 'main') {
-  //   await bot.editMessageText('что интересует?', {
-  //     chat_id: chatId,
-  //     message_id: msg_id,
-  //     parse_mode: 'Markdown'
-  //   });
-  //   // console.log(rateOptions.inline_keyboard)
-  //   await bot.editMessageReplyMarkup(repeatMain,
-  //     {
-  //       chat_id: chatId,
-  //       message_id: msg_id,
-  //     }
-  //   );
-  //   return
-  // }
-  // if (data === 'back' && user.prevMenu === 'main') {
-  //   await bot.editMessageText('что интересует?', {
-  //     chat_id: chatId,
-  //     message_id: msg_id,
-  //     parse_mode: 'Markdown'
-  //   });
-  //   // console.log(rateOptions.inline_keyboard)
-  //   await bot.editMessageReplyMarkup(repeatMain,
-  //     {
-  //       chat_id: chatId,
-  //       message_id: msg_id,
-  //     }
-  //   );
-  // }
+    // console.log(rateOptions.inline_keyboard)
+    await bot.editMessageReplyMarkup(rateOptions,
+      {
+        chat_id: chatId,
+        message_id: msg_id,
+      }
+    );
+    user.prevMenu = 'main'
+    return
+  }
+  if (data === 'back' && user.prevMenu === 'main') {
+    await bot.editMessageText('что интересует?', {
+      chat_id: chatId,
+      message_id: msg_id,
+      parse_mode: 'Markdown'
+    });
+    // console.log(rateOptions.inline_keyboard)
+    await bot.editMessageReplyMarkup(repeatMain,
+      {
+        chat_id: chatId,
+        message_id: msg_id,
+      }
+    );
+    return
+  }
+  if (data === 'back' && user.prevMenu === 'main') {
+    await bot.editMessageText('что интересует?', {
+      chat_id: chatId,
+      message_id: msg_id,
+      parse_mode: 'Markdown'
+    });
+    // console.log(rateOptions.inline_keyboard)
+    await bot.editMessageReplyMarkup(repeatMain,
+      {
+        chat_id: chatId,
+        message_id: msg_id,
+      }
+    );
+  }
 
 });
 

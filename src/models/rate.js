@@ -18,7 +18,7 @@ const Rate = sequelize.define('Rate',{
     defaultValue: 'RUB'
   },
    order_code: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
   },
   month_qty: {
     type: DataTypes.INTEGER

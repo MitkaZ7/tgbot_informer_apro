@@ -1,25 +1,26 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bot = void 0;
-var config_service_1 = require("../config/config.service");
-var telegraf_1 = require("telegraf");
-var start_command_1 = require("../comands/start.command");
-var telegraf_session_local_1 = require("telegraf-session-local");
-var Bot = /** @class */ (function () {
-    function Bot(configService) {
+const config_service_1 = require("../config/config.service");
+const telegraf_1 = require("telegraf");
+const start_command_1 = require("../comands/start.command");
+const telegraf_session_local_1 = __importDefault(require("telegraf-session-local"));
+class Bot {
+    constructor(configService) {
         this.configService = configService;
         this.commands = [];
         this.bot = new telegraf_1.Telegraf(this.configService.get('BOT_TOKEN'));
         this.bot.use(new telegraf_session_local_1.default({ database: 'sessions.json' })).middleware();
     }
-    Bot.prototype.init = function () {
+    init() {
         this.commands = [new start_command_1.StartCommand(this.bot)];
-        for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
-            var command = _a[_i];
+        for (const command of this.commands) {
             command.handle();
         }
         this.bot.launch();
-    };
-    return Bot;
-}());
+    }
+}
 exports.bot = new Bot(new config_service_1.ConfigService());

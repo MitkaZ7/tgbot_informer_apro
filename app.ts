@@ -1,16 +1,18 @@
 import 'dotenv/config'
-import express from 'express'
-import { sequelize } from './src/components/database.config.js'
-import {bot} from './src/components/bot.js'
+import express, { Express, Request, Response } from 'express';
+// import { sequelize } from './src/components/database.config.js'
+// import { bot } from './src/components/bot.js'
 // import User from './src/models/rate.js'
 
-const app = express();
+const app: Express = express();
 app.use(express.json());
-
+app.get('/', (req: Request, res: Response) => {
+  res.send('Express + TypeScript Server');
+});
 async function startApp() {
   try {
-    await sequelize.authenticate();
-    await sequelize.sync();
+    // await sequelize.authenticate();
+    // await sequelize.sync();
 
     console.log('DB Connection has been established successfully.');
     app.listen(process.env.PORT, () => {
@@ -23,4 +25,3 @@ async function startApp() {
   }
 }
 startApp();
-
